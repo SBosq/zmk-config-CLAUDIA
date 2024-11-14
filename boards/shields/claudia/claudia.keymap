@@ -1,0 +1,175 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+
+/ {
+    combos {
+        compatible = "zmk,combos";
+
+        left_enter {
+            bindings = <&kp ENTER>;
+            key-positions = <1 12 23>;
+        };
+
+        right_enter {
+            bindings = <&kp ENTER>;
+            key-positions = <8 17 26>;
+        };
+
+        esc {
+            bindings = <&kp ESCAPE>;
+            key-positions = <0 1>;
+        };
+
+        tab {
+            bindings = <&kp TAB>;
+            key-positions = <3 14>;
+        };
+
+        shift_tab {
+            bindings = <&kp LS(TAB)>;
+            key-positions = <2 13>;
+        };
+
+        hold_space {
+            bindings = <&kp SPACE>;
+            key-positions = <31 23>;
+        };
+
+        caps_word {
+            bindings = <&caps_word>;
+            key-positions = <14 15>;
+        };
+
+        toggle_nav {
+            bindings = <&tog 2>;
+            key-positions = <11 2 13>;
+            layers = <0 2>;
+            require-prior-idle-ms = <350>;
+        };
+
+        jsdoc {
+            bindings = <&jsdoc>;
+            key-positions = <29 28>;
+        };
+
+        caps_lock {
+            bindings = <&kp CAPSLOCK>;
+            key-positions = <13 12 16 17>;
+        };
+
+        screen_shot {
+            bindings = <&kp LS(LG(S))>;
+            key-positions = <0 11>;
+        };
+
+        reset {
+            bindings = <&sys_reset>;
+            key-positions = <0 31 32 9>;
+        };
+
+        bootloader {
+            bindings = <&bootloader>;
+            key-positions = <4 14 5 15>;
+        };
+
+        bt_clear_all {
+            bindings = <&bt BT_CLR_ALL>;
+            key-positions = <20 21 29 28 22 27>;
+        };
+    };
+
+    behaviors {
+        hm: HOMEROW_MODS {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <250>;
+            quick-tap-ms = <0>;
+            flavor = "balanced";
+            require-prior-idle-ms = <200>;
+        };
+
+        hs: HOMEROW_SHIFT {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_SHIFT";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <250>;
+            quick-tap-ms = <0>;
+            flavor = "balanced";
+            require-prior-idle-ms = <100>;
+        };
+
+        esc: esc {
+            compatible = "zmk,behavior-tap-dance";
+            label = "ESC";
+            #binding-cells = <0>;
+            bindings = <&kp Q>, <&kp ESC>;
+
+            tapping-term-ms = <200>;
+        };
+
+        tab: tab {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TAB";
+            #binding-cells = <0>;
+            bindings = <&mt LCTRL ENTER>, <&kp TAB>;
+
+            tapping-term-ms = <250>;
+        };
+    };
+
+    macros {
+        jsdoc: jsdoc {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FSLH &kp STAR &kp STAR &kp SPACE>;
+            label = "JSDOC";
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        Base {
+            bindings = <
+&kp Q           &kp W           &kp E        &kp R             &kp T    &kp Y            &kp U        &kp I         &kp O            &kp P
+&hm LEFT_GUI A  &hm LEFT_ALT S  &hm LCTRL D  &hs LEFT_SHIFT F  &kp G    &kp H            &hs RSHFT J  &hm RCTRL K   &hm RIGHT_ALT L  &hm RMETA SQT
+&hs LSHFT Z     &kp X           &kp C        &kp V             &kp B    &kp N            &kp M        &kp COMMA     &kp DOT          &hs RSHFT FSLH
+                                &lt 2 TAB    &lt 1 SPACE                &lt 2 BACKSPACE               &lt 1 DELETE
+            >;
+        };
+
+        Num+Sym {
+            bindings = <
+&kp NUMBER_1     &kp NUMBER_2     &kp NUMBER_3     &kp NUMBER_4   &kp N5        &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS          &kp UNDERSCORE   &kp PLUS             &kp TILDE
+&hm LEFT_GUI N6  &hm LEFT_ALT N7  &hm LCTRL N8     &hs LSHFT N9   &kp N0        &kp LEFT_BRACKET      &hm RIGHT_SHIFT RIGHT_BRACKET  &hm RCTRL MINUS  &hm RIGHT_ALT EQUAL  &hm RIGHT_GUI GRAVE
+&kp KP_PLUS      &kp KP_MINUS     &kp KP_MULTIPLY  &kp KP_DIVIDE  &kp KP_DOT    &kp LEFT_BRACE        &kp RIGHT_BRACE                &kp SEMI         &kp COLON            &kp BACKSLASH
+                                  &lt 3 LS(TAB)    &trans                       &lt 3 TAB                                            &trans
+            >;
+        };
+
+        Nav+Func {
+            bindings = <
+&mt LEFT_SHIFT PAGE_UP  &mt LEFT_ALT HOME  &mt LS(LCTRL) UP_ARROW  &mt LALT END  &kp LS(LA(LC(BACKSLASH)))    &trans  &kp F9        &kp F10       &kp F11          &kp F12
+&mt LCTRL PAGE_DOWN     &kp LEFT           &kp DOWN                &kp RIGHT     &kp BACKSPACE                &trans  &hs RSHFT F5  &hm RCTRL F6  &hm LEFT_ALT F7  &hm RMETA F8
+&kp LC(Z)               &kp LC(X)          &kp LC(C)               &kp LC(V)     &kp LS(LC(K))                &trans  &kp F1        &kp F2        &kp F3           &kp F4
+                                           &trans                  &kp LCTRL                                  &trans                &lt 3 TAB
+            >;
+        };
+
+        Bluetooth {
+            bindings = <
+&bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4     &trans       &trans  &trans  &trans  &trans
+&bt BT_DISC 0  &bt BT_DISC 1  &bt BT_DISC 2  &bt BT_DISC 3  &bt BT_DISC 4    &trans       &trans  &trans  &trans  &trans
+&trans         &trans         &out OUT_TOG   &bt BT_CLR     &sys_reset       &bootloader  &trans  &trans  &trans  &trans
+                              &trans         &trans                          &trans               &trans
+            >;
+        };
+    };
+};
